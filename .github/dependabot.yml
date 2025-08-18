@@ -1,0 +1,29 @@
+version: 2
+updates:
+  # Update npm dependencies for the main project
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '09:00'
+    open-pull-requests-limit: 10
+    assignees:
+      - 'ndisidore'
+    commit-message:
+      prefix: 'deps'
+      include: 'scope'
+
+  # Update GitHub Actions
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '09:00'
+    open-pull-requests-limit: 5
+    assignees:
+      - 'ndisidore'
+    commit-message:
+      prefix: 'ci'
+      include: 'scope'
