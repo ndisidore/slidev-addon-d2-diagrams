@@ -29,7 +29,9 @@
     "build": "slidev build",
     "dev": "slidev --open",
     "export": "slidev export",
-    "lint": "eslint .",
+    "lint:eslint": "eslint .",
+    "tsc:check": "tsc",
+    "lint": "npm run format:check && npm run tsc:check && npm run lint:eslint",
     "test": "vitest",
     "format:check": "prettier --check .",
     "format:fix": "prettier --write ."
