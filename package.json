@@ -40,7 +40,7 @@
     "@terrastruct/d2": "^0.1.33"
   },
   "devDependencies": {
-    "@slidev/cli": "^52.9.1",
+    "@slidev/cli": "^52.11.0",
     "@types/node": "^24.10.1",
     "@typescript-eslint/eslint-plugin": "^8.47.0",
     "@typescript-eslint/parser": "^8.46.4",
