@@ -37,7 +37,7 @@
     "lint": "npm run format:check && npm run tsc:check && npm run lint:eslint",
     "lint:eslint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "tsc:check": "tsc --noEmit",
+    "tsc:check": "tsc --noEmit -p tsconfig.check.json",
     "format:check": "prettier --check .",
     "format:fix": "prettier --write ."
   },
