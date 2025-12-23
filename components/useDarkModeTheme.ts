@@ -85,7 +85,7 @@ export function useDarkModeTheme(options: UseDarkModeThemeOptions) {
       return resolveThemeId(
         options.darkThemeId?.value,
         options.darkTheme?.value,
-        DEFAULT_DARK_THEME_ID
+        DEFAULT_DARK_THEME_ID,
       )
     }
 

@@ -300,7 +300,7 @@ describe('D2Diagram', () => {
     mockRender.mockResolvedValue(
       '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 258 600" preserveAspectRatio="xMinYMin meet">' +
         '<svg class="d2-inner" width="258" height="600" viewBox="-101 -101 258 600"><rect /></svg>' +
-        '</svg>'
+        '</svg>',
     )
 
     const wrapper = mount(D2Diagram, {

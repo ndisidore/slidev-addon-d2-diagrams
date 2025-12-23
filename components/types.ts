@@ -10,7 +10,7 @@ export const D2_THEMES = {
   'cool-classics': 4,
   'mixed-berry-blue': 5,
   'grape-soda': 6,
-  'aubergine': 7,
+  aubergine: 7,
   'colorblind-clear': 8,
   'vanilla-nitro-cola': 100,
   'orange-creamsicle': 101,
@@ -131,7 +131,7 @@ export const DEFAULT_DARK_THEME_ID = D2_THEMES['dark-mauve']
 export function resolveThemeId(
   themeId?: number,
   themeName?: D2ThemeName,
-  defaultId: number = DEFAULT_LIGHT_THEME_ID
+  defaultId: number = DEFAULT_LIGHT_THEME_ID,
 ): number {
   if (themeId !== undefined) return themeId
   if (themeName && themeName in D2_THEMES) {

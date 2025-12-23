@@ -118,9 +118,7 @@ function processSvgForFit(svg: string): string {
   // Remove explicit width/height from ALL SVG elements
   // The viewBox will preserve aspect ratio, CSS will control actual size
   return svg.replace(/<svg([^>]*)>/g, (match, attrs) => {
-    const newAttrs = attrs
-      .replace(/\s+width="[^"]*"/g, '')
-      .replace(/\s+height="[^"]*"/g, '')
+    const newAttrs = attrs.replace(/\s+width="[^"]*"/g, '').replace(/\s+height="[^"]*"/g, '')
     return `<svg${newAttrs}>`
   })
 }

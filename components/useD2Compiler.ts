@@ -195,7 +195,7 @@ export function useD2Compiler(options: UseD2CompilerOptions): UseD2CompilerRetur
     () => {
       compile()
     },
-    { immediate: true }
+    { immediate: true },
   )
 
   return {

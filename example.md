@@ -222,15 +222,15 @@ server2 -> db`
 
 # Component Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `code` | `string` | required | D2 diagram source |
-| `theme` | `string` | - | Named theme |
-| `dark-theme` | `string` | - | Dark mode theme |
-| `sketch` | `boolean` | `false` | Hand-drawn style |
-| `layout-engine` | `string` | `dagre` | `dagre` or `elk` |
-| `max-height` | `string` | `500px` | Max container height |
-| `fit` | `boolean` | `false` | Scale diagram to fit container |
+| Prop            | Type      | Default  | Description                    |
+| --------------- | --------- | -------- | ------------------------------ |
+| `code`          | `string`  | required | D2 diagram source              |
+| `theme`         | `string`  | -        | Named theme                    |
+| `dark-theme`    | `string`  | -        | Dark mode theme                |
+| `sketch`        | `boolean` | `false`  | Hand-drawn style               |
+| `layout-engine` | `string`  | `dagre`  | `dagre` or `elk`               |
+| `max-height`    | `string`  | `500px`  | Max container height           |
+| `fit`           | `boolean` | `false`  | Scale diagram to fit container |
 
 ---
 

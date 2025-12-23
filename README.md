@@ -41,77 +41,78 @@ Then use the `D2Diagram` component in your slides:
 
 ### Required
 
-| Prop | Type | Description |
-|------|------|-------------|
+| Prop   | Type     | Description            |
+| ------ | -------- | ---------------------- |
 | `code` | `string` | D2 diagram source code |
 
 ### Theme Options
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `themeId` | `number` | - | Numeric theme ID (takes precedence over `theme`) |
-| `theme` | `string` | - | Named theme (see [Available Themes](#available-themes)) |
-| `darkThemeId` | `number` | `200` | Theme ID for dark mode |
-| `darkTheme` | `string` | - | Named theme for dark mode |
-| `autoSyncDarkMode` | `boolean` | `true` | Sync theme with Slidev dark mode |
+| Prop               | Type      | Default | Description                                             |
+| ------------------ | --------- | ------- | ------------------------------------------------------- |
+| `themeId`          | `number`  | -       | Numeric theme ID (takes precedence over `theme`)        |
+| `theme`            | `string`  | -       | Named theme (see [Available Themes](#available-themes)) |
+| `darkThemeId`      | `number`  | `200`   | Theme ID for dark mode                                  |
+| `darkTheme`        | `string`  | -       | Named theme for dark mode                               |
+| `autoSyncDarkMode` | `boolean` | `true`  | Sync theme with Slidev dark mode                        |
 
 ### Rendering Options
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `sketch` | `boolean` | `false` | Enable sketch/hand-drawn style |
-| `center` | `boolean` | `true` | Center the diagram |
-| `scale` | `number` | `1` | Scale factor for output |
-| `pad` | `number` | `100` | Padding around diagram (pixels) |
-| `layoutEngine` | `'dagre' \| 'elk'` | `'dagre'` | Layout algorithm |
+| Prop           | Type               | Default   | Description                     |
+| -------------- | ------------------ | --------- | ------------------------------- |
+| `sketch`       | `boolean`          | `false`   | Enable sketch/hand-drawn style  |
+| `center`       | `boolean`          | `true`    | Center the diagram              |
+| `scale`        | `number`           | `1`       | Scale factor for output         |
+| `pad`          | `number`           | `100`     | Padding around diagram (pixels) |
+| `layoutEngine` | `'dagre' \| 'elk'` | `'dagre'` | Layout algorithm                |
 
 ### Animation Options
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `animateInterval` | `number` | - | Milliseconds between boards (for multi-board diagrams) |
-| `target` | `string` | - | Specific board to render (e.g., `'layers.x.*'`) |
+| Prop              | Type     | Default | Description                                            |
+| ----------------- | -------- | ------- | ------------------------------------------------------ |
+| `animateInterval` | `number` | -       | Milliseconds between boards (for multi-board diagrams) |
+| `target`          | `string` | -       | Specific board to render (e.g., `'layers.x.*'`)        |
 
 ### Import Support
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `fs` | `Record<string, string>` | - | Virtual file system for D2 imports |
-| `inputPath` | `string` | `'index.d2'` | Main input file path when using `fs` |
+| Prop        | Type                     | Default      | Description                          |
+| ----------- | ------------------------ | ------------ | ------------------------------------ |
+| `fs`        | `Record<string, string>` | -            | Virtual file system for D2 imports   |
+| `inputPath` | `string`                 | `'index.d2'` | Main input file path when using `fs` |
 
 ### Output Options
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
+| Prop            | Type      | Default | Description                     |
+| --------------- | --------- | ------- | ------------------------------- |
 | `forceAppendix` | `boolean` | `false` | Add appendix for tooltips/links |
 
 ### Container Sizing
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `width` | `string \| number` | - | Fixed container width |
-| `height` | `string \| number` | - | Fixed container height |
-| `maxWidth` | `string` | `'100%'` | Maximum container width |
-| `maxHeight` | `string` | `'500px'` | Maximum container height |
-| `fit` | `boolean` | `false` | Scale diagram to fit within container bounds |
+| Prop        | Type               | Default   | Description                                  |
+| ----------- | ------------------ | --------- | -------------------------------------------- |
+| `width`     | `string \| number` | -         | Fixed container width                        |
+| `height`    | `string \| number` | -         | Fixed container height                       |
+| `maxWidth`  | `string`           | `'100%'`  | Maximum container width                      |
+| `maxHeight` | `string`           | `'500px'` | Maximum container height                     |
+| `fit`       | `boolean`          | `false`   | Scale diagram to fit within container bounds |
 
 ## Events
 
-| Event | Payload | Description |
-|-------|---------|-------------|
+| Event      | Payload        | Description                                   |
+| ---------- | -------------- | --------------------------------------------- |
 | `compiled` | `string` (SVG) | Emitted when diagram is successfully compiled |
-| `error` | `string` | Emitted when compilation fails |
+| `error`    | `string`       | Emitted when compilation fails                |
 
 ## Slots
 
-| Slot | Props | Description |
-|------|-------|-------------|
-| `loading` | - | Custom loading state |
-| `error` | `{ error: string }` | Custom error state |
+| Slot      | Props               | Description          |
+| --------- | ------------------- | -------------------- |
+| `loading` | -                   | Custom loading state |
+| `error`   | `{ error: string }` | Custom error state   |
 
 ## Available Themes
 
 ### Light Themes
+
 - `neutral-default` (0)
 - `neutral-grey` (1)
 - `flagship-terrastruct` (3)
@@ -131,6 +132,7 @@ Then use the `D2Diagram` component in your slides:
 - `origami` (302)
 
 ### Dark Themes
+
 - `dark-mauve` (200)
 - `dark-flagship-terrastruct` (201)
 
@@ -145,20 +147,13 @@ Then use the `D2Diagram` component in your slides:
 ### With Theme
 
 ```vue
-<D2Diagram
-  code="A -> B -> C"
-  theme="grape-soda"
-  dark-theme="dark-mauve"
-/>
+<D2Diagram code="A -> B -> C" theme="grape-soda" dark-theme="dark-mauve" />
 ```
 
 ### Sketch Mode
 
 ```vue
-<D2Diagram
-  code="user -> app: Login"
-  sketch
-/>
+<D2Diagram code="user -> app: Login" sketch />
 ```
 
 ### With Animation (Multi-board)
@@ -180,10 +175,7 @@ Then use the `D2Diagram` component in your slides:
 ### With File Imports
 
 ```vue
-<D2Diagram
-  code="main: @import 'shared.d2'"
-  :fs="{ 'shared.d2': 'x: {shape: circle}' }"
-/>
+<D2Diagram code="main: @import 'shared.d2'" :fs="{ 'shared.d2': 'x: {shape: circle}' }" />
 ```
 
 ### Custom Loading/Error States
@@ -202,10 +194,7 @@ Then use the `D2Diagram` component in your slides:
 ### ELK Layout Engine
 
 ```vue
-<D2Diagram
-  code="A -> B; B -> C; C -> A"
-  layout-engine="elk"
-/>
+<D2Diagram code="A -> B; B -> C; C -> A" layout-engine="elk" />
 ```
 
 ### Fit to Container
@@ -213,11 +202,7 @@ Then use the `D2Diagram` component in your slides:
 Use the `fit` prop to scale diagrams to fit within constrained containers:
 
 ```vue
-<D2Diagram
-  code="A -> B -> C -> D -> E"
-  max-height="200px"
-  fit
-/>
+<D2Diagram code="A -> B -> C -> D -> E" max-height="200px" fit />
 ```
 
 Without `fit`, diagrams render at their natural size and may overflow. With `fit`, the diagram scales down to fit within the `maxHeight` (or `maxWidth`) while preserving aspect ratio.
@@ -229,11 +214,7 @@ By default, the component automatically syncs with Slidev's dark mode. When Slid
 To disable auto-sync:
 
 ```vue
-<D2Diagram
-  code="A -> B"
-  :auto-sync-dark-mode="false"
-  theme="terminal"
-/>
+<D2Diagram code="A -> B" :auto-sync-dark-mode="false" theme="terminal" />
 ```
 
 ## Development

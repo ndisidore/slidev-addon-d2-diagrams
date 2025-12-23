@@ -214,7 +214,7 @@ describe('useD2Compiler', () => {
         target: 'layers.x.*',
         forceAppendix: true,
         noXMLTag: true,
-      })
+      }),
     )
   })
 
