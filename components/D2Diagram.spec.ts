@@ -161,7 +161,7 @@ describe('D2Diagram', () => {
 
     expect(mockCompile).toHaveBeenCalledTimes(1)
 
-    await wrapper.setProps({ code: 'C -> D' })
+    await wrapper.setProps({ code: 'C -> D' } as Record<string, unknown>)
     await nextTick()
     await nextTick()
 

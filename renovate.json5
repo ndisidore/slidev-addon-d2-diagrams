@@ -1,0 +1,178 @@
+{
+  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+  extends: [
+    'config:recommended',
+    ':semanticCommits',
+    ':separateMajorReleases',
+    'group:allNonMajor',
+  ],
+
+  // Schedule updates for Monday mornings (matching previous Dependabot config)
+  schedule: ['before 9am on Monday'],
+  timezone: 'America/New_York',
+
+  // PR configuration
+  prHourlyLimit: 5,
+  prConcurrentLimit: 10,
+  assignees: ['ndisidore'],
+  labels: ['dependencies'],
+
+  // Commit message format
+  commitMessagePrefix: '',
+  semanticCommitType: 'deps',
+  semanticCommitScope: '{{depName}}',
+
+  // Package rules for grouping
+  packageRules: [
+    // ==================== Production Dependencies ====================
+    {
+      description: 'Group all production dependencies',
+      matchDepTypes: ['dependencies'],
+      matchUpdateTypes: ['minor', 'patch'],
+      groupName: 'production dependencies (non-major)',
+      semanticCommitType: 'deps',
+    },
+    {
+      description: 'Production dependencies - major updates (separate PRs)',
+      matchDepTypes: ['dependencies'],
+      matchUpdateTypes: ['major'],
+      semanticCommitType: 'deps',
+      labels: ['dependencies', 'major'],
+    },
+
+    // ==================== Dev Dependencies ====================
+    // Testing tools
+    {
+      description: 'Group testing tools',
+      matchPackagePatterns: ['vitest', '^@vue/test-utils', 'jsdom'],
+      matchDepTypes: ['devDependencies'],
+      groupName: 'testing tools',
+      semanticCommitType: 'deps',
+      semanticCommitScope: 'testing',
+    },
+
+    // Linting & formatting
+    {
+      description: 'Group linting and formatting tools',
+      matchPackagePatterns: ['eslint', 'prettier', '^@typescript-eslint'],
+      matchDepTypes: ['devDependencies'],
+      groupName: 'linting and formatting',
+      semanticCommitType: 'deps',
+      semanticCommitScope: 'lint',
+    },
+
+    // TypeScript & build tools
+    {
+      description: 'Group TypeScript and build tools',
+      matchPackagePatterns: ['typescript', 'vite', '^@vitejs/'],
+      matchDepTypes: ['devDependencies'],
+      groupName: 'typescript and build tools',
+      semanticCommitType: 'deps',
+      semanticCommitScope: 'build',
+    },
+
+    // Vue ecosystem
+    {
+      description: 'Group Vue ecosystem packages',
+      matchPackagePatterns: ['^vue$', '^@vue/', '^@vueuse/'],
+      matchDepTypes: ['devDependencies'],
+      groupName: 'vue ecosystem',
+      semanticCommitType: 'deps',
+      semanticCommitScope: 'vue',
+    },
+
+    // Slidev ecosystem
+    {
+      description: 'Group Slidev packages',
+      matchPackagePatterns: ['^@slidev/'],
+      matchDepTypes: ['devDependencies'],
+      groupName: 'slidev ecosystem',
+      semanticCommitType: 'deps',
+      semanticCommitScope: 'slidev',
+    },
+
+    // Node types
+    {
+      description: 'Group Node.js type definitions',
+      matchPackagePatterns: ['^@types/'],
+      matchDepTypes: ['devDependencies'],
+      groupName: 'type definitions',
+      semanticCommitType: 'deps',
+      semanticCommitScope: 'types',
+    },
+
+    // Remaining dev dependencies (catch-all for non-grouped)
+    {
+      description: 'Other dev dependencies (non-major)',
+      matchDepTypes: ['devDependencies'],
+      matchUpdateTypes: ['minor', 'patch'],
+      excludePackagePatterns: [
+        'vitest',
+        '@vue/test-utils',
+        'jsdom',
+        'eslint',
+        'prettier',
+        '@typescript-eslint',
+        'typescript',
+        'vite',
+        '@vitejs/',
+        '^vue$',
+        '@vue/',
+        '@vueuse/',
+        '@slidev/',
+        '@types/',
+      ],
+      groupName: 'dev dependencies (other)',
+      semanticCommitType: 'deps',
+      semanticCommitScope: 'deps-dev',
+    },
+
+    // ==================== GitHub Actions ====================
+    {
+      description: 'Group GitHub Actions',
+      matchManagers: ['github-actions'],
+      groupName: 'github actions',
+      semanticCommitType: 'ci',
+      semanticCommitScope: 'actions',
+      labels: ['dependencies', 'ci'],
+    },
+
+    // ==================== Automerge Settings ====================
+    {
+      description: 'Automerge minor and patch updates for dev dependencies',
+      matchDepTypes: ['devDependencies'],
+      matchUpdateTypes: ['minor', 'patch'],
+      automerge: true,
+      automergeType: 'pr',
+      platformAutomerge: true,
+    },
+    {
+      description: 'Automerge patch updates for production dependencies',
+      matchDepTypes: ['dependencies'],
+      matchUpdateTypes: ['patch'],
+      automerge: true,
+      automergeType: 'pr',
+      platformAutomerge: true,
+    },
+    {
+      description: 'Automerge GitHub Actions minor and patch',
+      matchManagers: ['github-actions'],
+      matchUpdateTypes: ['minor', 'patch'],
+      automerge: true,
+      automergeType: 'pr',
+      platformAutomerge: true,
+    },
+  ],
+
+  // Lock file maintenance
+  lockFileMaintenance: {
+    enabled: true,
+    schedule: ['before 9am on the first day of the month'],
+  },
+
+  // Vulnerability alerts
+  vulnerabilityAlerts: {
+    enabled: true,
+    labels: ['security'],
+  },
+}
