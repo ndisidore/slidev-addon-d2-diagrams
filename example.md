@@ -61,14 +61,14 @@ Use the `theme` prop with named themes:
 
 **Grape Soda**
 
-<D2Diagram code="A -> B" theme="grape-soda" max-height="150px" />
+<D2Diagram code="A -> B" theme="grape-soda" max-height="150px" fit />
 
 </div>
 <div>
 
 **Terminal**
 
-<D2Diagram code="A -> B" theme="terminal" max-height="150px" />
+<D2Diagram code="A -> B" theme="terminal" max-height="150px" fit />
 
 </div>
 </div>
@@ -230,6 +230,7 @@ server2 -> db`
 | `sketch` | `boolean` | `false` | Hand-drawn style |
 | `layout-engine` | `string` | `dagre` | `dagre` or `elk` |
 | `max-height` | `string` | `500px` | Max container height |
+| `fit` | `boolean` | `false` | Scale diagram to fit container |
 
 ---
 

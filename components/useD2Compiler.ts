@@ -157,9 +157,10 @@ export function useD2Compiler(options: UseD2CompilerOptions): UseD2CompilerRetur
       const finalRenderOpts: RenderOptions = {
         ...renderOpts,
         ...compileResult.renderOptions,
-        // Ensure our theme settings take precedence
+        // Ensure our settings take precedence over diagram defaults
         themeID: renderOpts.themeID,
         darkThemeID: renderOpts.darkThemeID,
+        sketch: renderOpts.sketch,
       }
 
       // Render to SVG

@@ -12,7 +12,7 @@
     <div v-else-if="error" class="d2-error" role="alert">
       <slot name="error" :error="error">Error rendering diagram: {{ error }}</slot>
     </div>
-    <div v-else v-html="svgContent" class="d2-diagram"></div>
+    <div v-else v-html="processedSvgContent" class="d2-diagram" :class="{ 'd2-fit': fit }"></div>
   </div>
 </template>
 
@@ -34,6 +34,7 @@ const props = withDefaults(defineProps<D2DiagramProps>(), {
   inputPath: D2_DIAGRAM_DEFAULTS.inputPath,
   maxWidth: D2_DIAGRAM_DEFAULTS.maxWidth,
   maxHeight: D2_DIAGRAM_DEFAULTS.maxHeight,
+  fit: D2_DIAGRAM_DEFAULTS.fit,
 })
 
 const emit = defineEmits<{
@@ -93,6 +94,11 @@ const containerStyle = computed(() => {
   }
   if (props.maxHeight) {
     style.maxHeight = props.maxHeight
+    // When fit mode is active and maxHeight is set, use it as the actual height
+    // This gives child elements a defined height to scale within
+    if (props.fit && !props.height) {
+      style.height = props.maxHeight
+    }
   }
 
   return style
@@ -106,6 +112,24 @@ const ariaLabel = computed(() => {
   const truncated = firstLine.length > 50 ? `${firstLine.slice(0, 50)}...` : firstLine
   return `D2 Diagram: ${truncated}`
 })
+
+// Process SVG for fit mode - remove all explicit dimensions to let CSS control scaling
+function processSvgForFit(svg: string): string {
+  // Remove explicit width/height from ALL SVG elements
+  // The viewBox will preserve aspect ratio, CSS will control actual size
+  return svg.replace(/<svg([^>]*)>/g, (match, attrs) => {
+    const newAttrs = attrs
+      .replace(/\s+width="[^"]*"/g, '')
+      .replace(/\s+height="[^"]*"/g, '')
+    return `<svg${newAttrs}>`
+  })
+}
+
+// Processed SVG content for rendering (applies fit transformation if enabled)
+const processedSvgContent = computed(() => {
+  if (!svgContent.value || !props.fit) return svgContent.value
+  return processSvgForFit(svgContent.value)
+})
 </script>
 
 <style scoped>
@@ -113,8 +137,11 @@ const ariaLabel = computed(() => {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 200px;
   overflow: hidden;
+}
+
+.d2-diagram-container:not(:has(.d2-fit)) {
+  min-height: 200px;
 }
 
 .d2-loading {
@@ -146,5 +173,17 @@ const ariaLabel = computed(() => {
   max-height: 100%;
   height: auto;
   width: auto;
+}
+
+.d2-diagram.d2-fit {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.d2-diagram.d2-fit :deep(svg) {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 </style>

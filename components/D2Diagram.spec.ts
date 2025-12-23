@@ -269,4 +269,69 @@ describe('D2Diagram', () => {
 
     expect(mockCompile).not.toHaveBeenCalled()
   })
+
+  it('applies fit class when fit prop is true', async () => {
+    const wrapper = mount(D2Diagram, {
+      props: { code: 'A -> B', fit: true },
+    })
+
+    await nextTick()
+    await nextTick()
+    await nextTick()
+
+    expect(wrapper.find('.d2-diagram.d2-fit').exists()).toBe(true)
+  })
+
+  it('does not apply fit class when fit prop is false', async () => {
+    const wrapper = mount(D2Diagram, {
+      props: { code: 'A -> B', fit: false },
+    })
+
+    await nextTick()
+    await nextTick()
+    await nextTick()
+
+    expect(wrapper.find('.d2-diagram').exists()).toBe(true)
+    expect(wrapper.find('.d2-diagram.d2-fit').exists()).toBe(false)
+  })
+
+  it('processes SVG to remove dimensions when fit is true', async () => {
+    // D2 generates nested SVGs - outer has viewBox, inner has explicit dimensions
+    mockRender.mockResolvedValue(
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 258 600" preserveAspectRatio="xMinYMin meet">' +
+        '<svg class="d2-inner" width="258" height="600" viewBox="-101 -101 258 600"><rect /></svg>' +
+        '</svg>'
+    )
+
+    const wrapper = mount(D2Diagram, {
+      props: { code: 'A -> B', fit: true },
+    })
+
+    await nextTick()
+    await nextTick()
+    await nextTick()
+
+    const html = wrapper.html()
+    // All explicit dimensions should be removed (CSS controls sizing)
+    expect(html).not.toContain('width="258"')
+    expect(html).not.toContain('height="600"')
+    // ViewBox should be preserved
+    expect(html).toContain('viewBox="0 0 258 600"')
+  })
+
+  it('preserves original SVG when fit is false', async () => {
+    mockRender.mockResolvedValue('<svg width="277" height="455"><rect /></svg>')
+
+    const wrapper = mount(D2Diagram, {
+      props: { code: 'A -> B', fit: false },
+    })
+
+    await nextTick()
+    await nextTick()
+    await nextTick()
+
+    const html = wrapper.html()
+    expect(html).toContain('width="277"')
+    expect(html).toContain('height="455"')
+  })
 })

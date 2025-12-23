@@ -93,6 +93,7 @@ Then use the `D2Diagram` component in your slides:
 | `height` | `string \| number` | - | Fixed container height |
 | `maxWidth` | `string` | `'100%'` | Maximum container width |
 | `maxHeight` | `string` | `'500px'` | Maximum container height |
+| `fit` | `boolean` | `false` | Scale diagram to fit within container bounds |
 
 ## Events
 
@@ -206,6 +207,20 @@ Then use the `D2Diagram` component in your slides:
   layout-engine="elk"
 />
 ```
+
+### Fit to Container
+
+Use the `fit` prop to scale diagrams to fit within constrained containers:
+
+```vue
+<D2Diagram
+  code="A -> B -> C -> D -> E"
+  max-height="200px"
+  fit
+/>
+```
+
+Without `fit`, diagrams render at their natural size and may overflow. With `fit`, the diagram scales down to fit within the `maxHeight` (or `maxWidth`) while preserving aspect ratio.
 
 ## Dark Mode
 

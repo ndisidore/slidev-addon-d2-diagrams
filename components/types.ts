@@ -94,6 +94,8 @@ export interface D2DiagramProps {
   maxWidth?: string
   /** Maximum container height (default: '500px') */
   maxHeight?: string
+  /** Scale diagram to fit within container bounds (default: false) */
+  fit?: boolean
 }
 
 /**
@@ -110,6 +112,7 @@ export const D2_DIAGRAM_DEFAULTS = {
   inputPath: 'index.d2',
   maxWidth: '100%',
   maxHeight: '500px',
+  fit: false,
 } as const
 
 /**
