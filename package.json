@@ -64,7 +64,7 @@
     "prettier": "^3.6.2",
     "typescript": "^5.9.2",
     "vite": "^6.0.0",
-    "vitest": "^4.0.13",
+    "vitest": "^4.0.16",
     "vue": "^3.5.25"
   },
   "engines": {
