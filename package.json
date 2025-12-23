@@ -1,58 +1,71 @@
 {
   "name": "slidev-addon-d2-diagrams",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
-  "description": "Slidev addon for rendering D2 diagrams",
+  "description": "Slidev addon for rendering D2 diagrams with theme support, dark mode sync, and animations",
   "keywords": [
     "slidev-addon",
     "slidev",
     "d2",
-    "diagrams"
+    "d2lang",
+    "diagrams",
+    "presentation",
+    "slides"
   ],
-  "author": "",
+  "author": "ndisidore",
   "license": "MIT",
-  "homepage": "",
+  "homepage": "https://github.com/ndisidore/slidev-addon-d2-diagrams",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/ndisidore/slidev-addon-d2-diagrams.git"
   },
   "bugs": {
-    "url": ""
+    "url": "https://github.com/ndisidore/slidev-addon-d2-diagrams/issues"
   },
-  "main": "index.ts",
   "files": [
     "components",
-    "setup",
-    "index.ts"
+    "vite.config.ts"
   ],
   "scripts": {
-    "build": "slidev build",
     "dev": "slidev --open",
+    "build": "slidev build",
     "export": "slidev export",
-    "lint:eslint": "eslint .",
-    "tsc:check": "tsc",
-    "lint": "npm run format:check && npm run tsc:check && npm run lint:eslint",
+    "preview": "slidev build && slidev preview",
     "test": "vitest",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "lint": "npm run format:check && npm run tsc:check && npm run lint:eslint",
+    "lint:eslint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "tsc:check": "tsc --noEmit",
     "format:check": "prettier --check .",
     "format:fix": "prettier --write ."
   },
   "dependencies": {
     "@terrastruct/d2": "^0.1.33"
   },
+  "peerDependencies": {
+    "@slidev/cli": ">=52.0.0",
+    "vue": "^3.4.0"
+  },
   "devDependencies": {
     "@slidev/cli": "^52.9.1",
+    "@slidev/theme-default": "^0.25.0",
+    "@slidev/types": "^52.0.0",
     "@types/node": "^24.10.1",
     "@typescript-eslint/eslint-plugin": "^8.47.0",
     "@typescript-eslint/parser": "^8.46.4",
+    "@vitejs/plugin-vue": "^6.0.0",
+    "@vue/test-utils": "^2.4.6",
+    "@vueuse/core": "^12.0.0",
     "eslint": "^9.39.1",
     "eslint-plugin-vue": "^10.6.0",
+    "jsdom": "^25.0.1",
     "prettier": "^3.6.2",
     "typescript": "^5.9.2",
+    "vite": "^6.0.0",
     "vitest": "^4.0.13",
     "vue": "^3.5.25"
-  },
-  "peerDependencies": {
-    "@slidev/cli": ">=0.48.0"
   },
   "engines": {
     "node": ">=18.0.0"

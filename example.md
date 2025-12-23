@@ -1,20 +1,19 @@
 ---
-theme: seriph
 background: null
 highlighter: shiki
 css: unocss
 mdc: true
 transition: fade
-colorSchema: light
+colorSchema: auto
 addons:
-  - slidev-addon-d2-diagrams
+  - ./slidev-addon-d2-diagrams
 ---
 
 # slidev-addon-d2-diagrams
 
-D2 diagram addon for Slidev
+D2 diagram addon for Slidev with theme support and dark mode sync
 
-{.mt-4!}
+<div class="mt-4"></div>
 
 ---
 
@@ -35,7 +34,7 @@ addons:
 ---
 ```
 
-Then you can use the `<D2Diagram>` component in your slides:
+Then use the `<D2Diagram>` component in your slides:
 
 ```vue
 <D2Diagram code="A -> B: Hello World" />
@@ -49,205 +48,188 @@ Then you can use the `<D2Diagram>` component in your slides:
 
 Simple connections and shapes:
 
-<D2Diagram code="
-x -> y: hello world
-y -> z: good bye
-z -> x: see you later
-" />
+<D2Diagram code="x -> y: hello world" />
+
+---
+
+# Themes
+
+Use the `theme` prop with named themes:
+
+<div class="grid grid-cols-2 gap-4">
+<div>
+
+**Grape Soda**
+
+<D2Diagram code="A -> B" theme="grape-soda" max-height="150px" />
+
+</div>
+<div>
+
+**Terminal**
+
+<D2Diagram code="A -> B" theme="terminal" max-height="150px" />
+
+</div>
+</div>
+
+---
+
+# Dark Mode Support
+
+The component automatically syncs with Slidev's dark mode.
+
+<D2Diagram
+  code="client -> server: Request"
+  theme="flagship-terrastruct"
+  dark-theme="dark-flagship-terrastruct"
+  max-height="200px"
+/>
+
+---
+
+# Sketch Mode
+
+Enable hand-drawn style with the `sketch` prop:
+
+<div class="grid grid-cols-2 gap-4">
+<div>
+
+**Normal**
+
+<D2Diagram code="A -> B -> C" max-height="180px" />
+
+</div>
+<div>
+
+**Sketch**
+
+<D2Diagram code="A -> B -> C" sketch max-height="180px" />
+
+</div>
+</div>
+
+---
+
+# Database Schema
+
+<script setup>
+const databaseSchema = `users: {
+  shape: sql_table
+  id: int {constraint: primary_key}
+  name: string
+  email: string
+}
+
+posts: {
+  shape: sql_table
+  id: int {constraint: primary_key}
+  user_id: int {constraint: foreign_key}
+  title: string
+  content: text
+}
+
+users.id -> posts.user_id`
+</script>
+
+<D2Diagram
+  :code="databaseSchema"
+  theme="cool-classics"
+  dark-theme="dark-mauve"
+  max-height="350px"
+/>
 
 ---
 
 # System Architecture
 
-<D2Diagram code="
-users: Users {
-shape: person
-style.multiple: true
+<script setup>
+const microservicesArch = `direction: right
+
+client: Client App {
+  shape: rectangle
+  style.fill: '#e1f5fe'
 }
 
-load_balancer: Load Balancer {
-shape: diamond
+api: API Gateway {
+  shape: hexagon
+  style.fill: '#f3e5f5'
 }
 
-web_servers: Web Servers {
-shape: rectangle
-style.multiple: true
+auth: Auth Service {
+  shape: oval
+  style.fill: '#e8f5e8'
 }
 
-database: Database {
-shape: cylinder
-}
+client -> api: HTTP Request
+api -> auth: Validate Token
+auth -> api: Token Valid
+api -> client: Response`
+</script>
 
-cache: Redis Cache {
-shape: oval
-}
-
-users -> load_balancer: HTTPS requests
-load_balancer -> web_servers: Route traffic
-web_servers -> database: Query data
-web_servers -> cache: Cache lookup
-cache -> web_servers: Cached data
-database -> web_servers: Fresh data
-" />
-
----
-
-# Styling Options
-
-You can customize the appearance with various props:
-
-<D2Diagram 
-  code="
-  A: Server {
-    style.fill: lightblue
-    style.stroke: blue
-  }
-  B: Client {
-    style.fill: lightgreen
-    style.stroke: green
-  }
-  A -> B: API Call {
-    style.stroke: red
-    style.stroke-width: 3
-  }
-  "
-  sketch="true"
-  theme="default"
-  maxHeight="300px"
+<D2Diagram
+  :code="microservicesArch"
+  max-height="350px"
 />
 
 ---
 
 # Network Topology
 
-<D2Diagram code="
-internet: Internet {
-shape: cloud
-style.fill: lightblue
+<script setup>
+const networkTopology = `internet: Internet {
+  shape: cloud
+  style.fill: lightblue
 }
 
 router: Router {
-shape: diamond
+  shape: diamond
 }
 
-switch: Switch {
-shape: rectangle
-}
+switch: Switch
 
 server1: Web Server 1 {
-shape: rectangle
-style.fill: lightgreen
+  shape: rectangle
+  style.fill: lightgreen
 }
 
 server2: Web Server 2 {
-shape: rectangle
-style.fill: lightgreen
+  shape: rectangle
+  style.fill: lightgreen
 }
 
-server3: Database Server {
-shape: cylinder
-style.fill: orange
+db: Database {
+  shape: cylinder
+  style.fill: orange
 }
 
-internet -> router: WAN
-router -> switch: LAN
-switch -> server1: 192.168.1.10
-switch -> server2: 192.168.1.11
-switch -> server3: 192.168.1.20
+internet -> router
+router -> switch
+switch -> server1
+switch -> server2
+server1 -> db
+server2 -> db`
+</script>
 
-server1 -> server3: DB Query
-server2 -> server3: DB Query
-" />
-
----
-
-# Sequence Diagram
-
-<D2Diagram code="
-shape: sequence_diagram
-
-user: User
-frontend: Frontend
-backend: Backend
-db: Database
-
-user -> frontend: Login request
-frontend -> backend: Authenticate
-backend -> db: Check credentials
-db -> backend: User data
-backend -> frontend: JWT token
-frontend -> user: Login success
-" />
+<D2Diagram
+  :code="networkTopology"
+  theme="earth-tones"
+  dark-theme="dark-mauve"
+  max-height="380px"
+/>
 
 ---
 
 # Component Props
 
-The `<D2Diagram>` component supports various customization options:
-
-- `code`: D2 diagram code (required)
-- `theme`: Diagram theme (default: 'default')
-- `sketch`: Enable sketch mode (default: false)
-- `center`: Center the diagram (default: true)
-- `scale`: Scale factor (default: 1)
-- `pad`: Padding around diagram (default: 16)
-- `width`, `height`: Fixed dimensions
-- `maxWidth`, `maxHeight`: Maximum dimensions
-
----
-
-# Advanced Example
-
-<D2Diagram
-code="
-direction: right
-
-client: Client App {
-shape: rectangle
-style.fill: '#e1f5fe'
-}
-
-api: API Gateway {
-shape: hexagon
-style.fill: '#f3e5f5'
-}
-
-auth: Auth Service {
-shape: oval
-style.fill: '#e8f5e8'
-}
-
-users: User Service {
-shape: rectangle
-style.fill: '#fff3e0'
-}
-
-orders: Order Service {
-shape: rectangle
-style.fill: '#fce4ec'
-}
-
-db: Database {
-shape: cylinder
-style.fill: '#f1f8e9'
-}
-
-client -> api: HTTP Request
-api -> auth: Validate Token
-auth -> api: Token Valid
-api -> users: Get User Data
-api -> orders: Get Orders
-users -> db: Query Users
-orders -> db: Query Orders
-db -> users: User Data
-db -> orders: Order Data
-users -> api: Response
-orders -> api: Response
-api -> client: JSON Response
-"
-center="true"
-maxHeight="400px"
-/>
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `code` | `string` | required | D2 diagram source |
+| `theme` | `string` | - | Named theme |
+| `dark-theme` | `string` | - | Dark mode theme |
+| `sketch` | `boolean` | `false` | Hand-drawn style |
+| `layout-engine` | `string` | `dagre` | `dagre` or `elk` |
+| `max-height` | `string` | `500px` | Max container height |
 
 ---
 
@@ -255,6 +237,6 @@ maxHeight="400px"
 
 - [D2 Language Documentation](https://d2lang.com/)
 - [Slidev Documentation](https://sli.dev/)
-- [Plugin Source Code](https://github.com/your-repo/slidev-addon-d2-diagrams)
+- [Source Code](https://github.com/ndisidore/slidev-addon-d2-diagrams)
 
-Create beautiful, interactive diagrams in your Slidev presentations!
+Create beautiful diagrams in your Slidev presentations!

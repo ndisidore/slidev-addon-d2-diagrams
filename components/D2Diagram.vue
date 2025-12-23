@@ -1,42 +1,84 @@
 <template>
-  <div class="d2-diagram-container" :style="containerStyle">
-    <div v-if="loading" class="d2-loading">Loading diagram...</div>
-    <div v-else-if="error" class="d2-error">Error rendering diagram: {{ error }}</div>
+  <div
+    class="d2-diagram-container"
+    :style="containerStyle"
+    role="img"
+    :aria-label="ariaLabel"
+    :aria-busy="loading"
+  >
+    <div v-if="loading" class="d2-loading" aria-live="polite">
+      <slot name="loading">Loading diagram...</slot>
+    </div>
+    <div v-else-if="error" class="d2-error" role="alert">
+      <slot name="error" :error="error">Error rendering diagram: {{ error }}</slot>
+    </div>
     <div v-else v-html="svgContent" class="d2-diagram"></div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
-import { D2 } from '@terrastruct/d2'
+import { computed, toRef, watch } from 'vue'
+import { useD2Compiler } from './useD2Compiler'
+import { useDarkModeTheme } from './useDarkModeTheme'
+import type { D2DiagramProps } from './types'
+import { D2_DIAGRAM_DEFAULTS } from './types'
 
-interface Props {
-  code: string
-  theme?: string
-  sketch?: boolean
-  center?: boolean
-  scale?: number
-  pad?: number
-  width?: string | number
-  height?: string | number
-  maxWidth?: string
-  maxHeight?: string
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  theme: 'default',
-  sketch: false,
-  center: true,
-  scale: 1,
-  pad: 16,
-  maxWidth: '100%',
-  maxHeight: '500px',
+const props = withDefaults(defineProps<D2DiagramProps>(), {
+  autoSyncDarkMode: D2_DIAGRAM_DEFAULTS.autoSyncDarkMode,
+  sketch: D2_DIAGRAM_DEFAULTS.sketch,
+  center: D2_DIAGRAM_DEFAULTS.center,
+  scale: D2_DIAGRAM_DEFAULTS.scale,
+  pad: D2_DIAGRAM_DEFAULTS.pad,
+  layoutEngine: D2_DIAGRAM_DEFAULTS.layoutEngine,
+  forceAppendix: D2_DIAGRAM_DEFAULTS.forceAppendix,
+  inputPath: D2_DIAGRAM_DEFAULTS.inputPath,
+  maxWidth: D2_DIAGRAM_DEFAULTS.maxWidth,
+  maxHeight: D2_DIAGRAM_DEFAULTS.maxHeight,
 })
 
-const loading = ref(true)
-const error = ref<string | null>(null)
-const svgContent = ref<string>('')
+const emit = defineEmits<{
+  /** Emitted when diagram is successfully compiled */
+  (e: 'compiled', svg: string): void
+  /** Emitted when compilation fails */
+  (e: 'error', error: string): void
+}>()
 
+// Dark mode theme integration
+const { activeThemeId } = useDarkModeTheme({
+  themeId: toRef(props, 'themeId'),
+  theme: toRef(props, 'theme'),
+  darkThemeId: toRef(props, 'darkThemeId'),
+  darkTheme: toRef(props, 'darkTheme'),
+  autoSyncDarkMode: toRef(props, 'autoSyncDarkMode'),
+})
+
+// D2 compilation
+const { svgContent, error, loading } = useD2Compiler({
+  code: toRef(props, 'code'),
+  themeId: activeThemeId,
+  darkThemeId: toRef(props, 'darkThemeId'),
+  sketch: toRef(props, 'sketch'),
+  center: toRef(props, 'center'),
+  scale: toRef(props, 'scale'),
+  pad: toRef(props, 'pad'),
+  layoutEngine: toRef(props, 'layoutEngine'),
+  animateInterval: toRef(props, 'animateInterval'),
+  target: toRef(props, 'target'),
+  fs: toRef(props, 'fs'),
+  inputPath: toRef(props, 'inputPath'),
+  forceAppendix: toRef(props, 'forceAppendix'),
+})
+
+// Emit events on state changes
+watch(svgContent, (svg) => {
+  if (svg) emit('compiled', svg)
+})
+
+watch(error, (err) => {
+  if (err) emit('error', err)
+})
+
+// Container styling
 const containerStyle = computed(() => {
   const style: Record<string, string> = {}
 
@@ -56,27 +98,13 @@ const containerStyle = computed(() => {
   return style
 })
 
-onMounted(async () => {
-  try {
-    const d2 = new D2()
-
-    const compileResult = await d2.compile(props.code)
-
-    const renderOptions = {
-      sketch: props.sketch,
-      center: props.center,
-      scale: props.scale,
-      pad: props.pad,
-    }
-
-    const svg = await d2.render(compileResult.diagram, renderOptions)
-    svgContent.value = svg
-  } catch (e) {
-    console.error('D2Diagram: Error occurred', e)
-    error.value = e instanceof Error ? e.message : 'Unknown error'
-  } finally {
-    loading.value = false
-  }
+// Accessibility label
+const ariaLabel = computed(() => {
+  if (!props.code) return 'D2 Diagram'
+  // Create a brief description from the first line of code
+  const firstLine = props.code.split('\n')[0].trim()
+  const truncated = firstLine.length > 50 ? `${firstLine.slice(0, 50)}...` : firstLine
+  return `D2 Diagram: ${truncated}`
 })
 </script>
 
