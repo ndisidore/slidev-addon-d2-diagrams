@@ -220,6 +220,41 @@ server2 -> db`
 
 ---
 
+# File Imports
+
+Use `@filename` syntax to reuse D2 definitions across diagrams:
+
+<script setup>
+// Import .d2 file as raw string using Vite
+import shared from '@diagrams/shared.d2?raw'
+
+const importExample = `...@shared
+
+api: API Server {
+  class: service
+  style.fill: '#e3f2fd'
+}
+
+cache: Redis Cache {
+  class: cache
+}
+
+db: PostgreSQL {
+  class: database
+}
+
+api -> cache: Get/Set
+api -> db: Query`
+</script>
+
+<D2Diagram
+  :code="importExample"
+  :fs="{ 'shared.d2': shared }"
+  max-height="300px"
+/>
+
+---
+
 # Component Props
 
 | Prop            | Type      | Default  | Description                    |

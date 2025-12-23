@@ -9,7 +9,7 @@ A [Slidev](https://sli.dev/) addon for rendering [D2](https://d2lang.com/) diagr
 - Support for all D2 themes (20+ built-in themes)
 - Sketch/hand-drawn mode
 - Multi-board animations
-- File imports (`@import` directive support)
+- File imports (D2 `@` directive support)
 - Multiple layout engines (dagre, elk)
 - Reactive updates when code changes
 - TypeScript support
@@ -174,8 +174,58 @@ Then use the `D2Diagram` component in your slides:
 
 ### With File Imports
 
+D2 supports importing definitions from other files using the `@` syntax (not `@import`):
+
 ```vue
-<D2Diagram code="main: @import 'shared.d2'" :fs="{ 'shared.d2': 'x: {shape: circle}' }" />
+<script setup>
+// Inline virtual file
+const sharedDefs = `classes: { box: { shape: rectangle } }`
+</script>
+
+<D2Diagram
+  code="...@shared
+    a: { class: box }"
+  :fs="{ 'shared.d2': sharedDefs }"
+/>
+```
+
+**D2 Import Syntax:**
+
+- `...@filename` - Spread import: inserts file contents into current scope
+- `a: @filename` - Regular import: assigns imported content to variable `a`
+- Omit the `.d2` extension in import statements (D2 adds it automatically)
+- The `fs` prop keys should include the `.d2` extension
+
+**Using External `.d2` Files in Slidev:**
+
+Since Slidev processes slides as virtual files, use a Vite alias to import `.d2` files:
+
+```ts
+// vite.config.ts
+import { defineConfig } from 'vite'
+import { fileURLToPath, URL } from 'node:url'
+
+export default defineConfig({
+  resolve: {
+    alias: {
+      '@diagrams': fileURLToPath(new URL('./', import.meta.url)),
+    },
+  },
+})
+```
+
+Then import in your slides:
+
+```vue
+<script setup>
+import shared from '@diagrams/shared.d2?raw'
+</script>
+
+<D2Diagram
+  code="...@shared
+    myNode: { class: myClass }"
+  :fs="{ 'shared.d2': shared }"
+/>
 ```
 
 ### Custom Loading/Error States
